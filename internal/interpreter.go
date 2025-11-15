@@ -1,18 +1,28 @@
 package internal
 
-import (
-	"log"
+import(
 	"os"
+	"fmt"
 )
 
-func Interpreter(brainfuckFilePath string) {
-	data, err := os.ReadFile(brainfuckFilePath)
-	if err != nil {
-		log.Fatal(err)
+func Run(program *Program) {
+	code, valid := checkIfValidFilePath(program.ProgramFilePath)
+	if !valid {
+		fmt.Printf("Error while loading file : %s", program.ProgramFilePath)
 	}
-	os.Stdout.Write(data)
+	// fmt.Printf("%v", code)
+	_ = checkBrackets(code)
 }
 
-func checkBrackets() {
+func checkIfValidFilePath(brainfuckFilePath string) ([]byte, bool) {
+	data, err := os.ReadFile(brainfuckFilePath)
+	if err != nil {
+		return nil, false
+	}
+	os.Stdout.Write(data)
+	return data, true
+}
 
+func checkBrackets(program []byte) (bool) {
+	return true
 }
