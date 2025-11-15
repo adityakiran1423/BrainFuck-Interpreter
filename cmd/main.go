@@ -9,13 +9,17 @@ import(
 
 func main() {
 	args := os.Args
-	
-	if len(args) != 1 {
+
+	switch len(args) {
+	case 1:
+		// if len(args) is 0, then run REPL? or print some info
+		fmt.Println("gofck")
+		os.Exit(0)
+	case 2:
+		program := i.New(args[1])
+		i.Run(program)
+	default :
 		fmt.Println("too many arguements")
 		os.Exit(0)
-	} else if len(args) == 1 {
-		i.Interpreter(args[1])
-	} else { 
-		fmt.Println("gofck") // if len(args) is 0, then run REPL? or print some info
 	}
 }
