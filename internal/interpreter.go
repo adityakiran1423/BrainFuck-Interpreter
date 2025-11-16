@@ -3,26 +3,55 @@ package internal
 import(
 	"os"
 	"fmt"
+
+	u "example.com/gofck/utils"
 )
 
 func Run(program *Program) {
-	code, valid := checkIfValidFilePath(program.ProgramFilePath)
+	valid := validate(program)
 	if !valid {
-		fmt.Printf("Error while loading file : %s", program.ProgramFilePath)
+		fmt.Printf("Error while loading file : %s\n", program.ProgramFilePath)
+		os.Exit(0)
 	}
-	// fmt.Printf("%v", code)
-	_ = checkBrackets(code)
+	fmt.Println("Program is valid")
 }
 
-func checkIfValidFilePath(brainfuckFilePath string) ([]byte, bool) {
-	data, err := os.ReadFile(brainfuckFilePath)
+func validate(program *Program) (bool) {
+	filePathValidateResult := validateFilePath(program.ProgramFilePath)
+
+	if filePathValidateResult {
+		bracketValidateResult := validateBrackets(program.ProgramFilePath)
+		if bracketValidateResult { return true }
+	}
+
+	return false
+}
+
+func validateFilePath(brainfuckFilePath string) (bool) {
+	_, err := os.ReadFile(brainfuckFilePath)
+	// os.Stdout.Write(data)
+
 	if err != nil {
-		return nil, false
+		fmt.Println("Error, file not found")
+		return false
 	}
-	os.Stdout.Write(data)
-	return data, true
+	return true
 }
 
-func checkBrackets(program []byte) (bool) {
-	return true
+func validateBrackets(brainfuckFilePath string) (bool) {
+	codeBytes, _ := os.ReadFile(brainfuckFilePath)
+	code := string(codeBytes)
+	fmt.Println(code)
+	i := 0
+	var stack u.Stack
+	for i < len(code) {
+		if string(code[i]) == "[" {
+			stack.Push(string(code[i]))
+		}
+		if string(code[i]) == "]" {
+			stack.Pop()
+		}
+		i++
+	}
+	return stack.IsEmpty()
 }
