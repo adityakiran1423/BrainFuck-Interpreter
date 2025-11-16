@@ -1,6 +1,6 @@
 package main
 
-import(
+import (
 	"fmt"
 	"os"
 
@@ -12,13 +12,13 @@ func main() {
 
 	switch len(args) {
 	case 1:
-		// if len(args) is 0, then run REPL? or print some info
+		// if len(args) is 1, then run REPL? or print some info
 		fmt.Println("gofck")
 		os.Exit(0)
 	case 2:
 		program := i.New(args[1])
 		i.Run(program)
-	default :
+	default:
 		fmt.Println("too many arguements")
 		os.Exit(0)
 	}
