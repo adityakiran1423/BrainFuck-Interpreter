@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	u "example.com/gofck/utils"
 )
@@ -51,26 +52,27 @@ func Run(p *Program) {
 			p.InstructionPointer--
 
 		case ".":
-			fmt.Println("printing using .")
-			fmt.Print(p.ProgramArray[p.InstructionPointer])
+			fmt.Print(rune(p.ProgramArray[p.InstructionPointer]))
 
 		case ",":
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Print("Enter text :")
 			text, _ := reader.ReadString('\n')
-
+			text = strings.TrimSpace(text)
 			if inputInt, err := strconv.Atoi(text); err == nil {
 				int32Input := uint32(inputInt)
 				p.ProgramArray[p.InstructionPointer] = int32Input
 			} else {
+				fmt.Println(err.Error())
 				fmt.Println("Error during input")
 				os.Exit(0)
 			}
 
 		case "[":
 
-
 		case "]":
+
+		case "\n":
 
 		default:
 			fmt.Println("invalid operation")
